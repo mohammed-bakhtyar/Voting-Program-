@@ -28,7 +28,7 @@ class TopicController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'opens_at' => 'required|date',
             'closes_at' => 'required|date|after:opens_at',
             'options' => 'required|array|min:2|max:10',
@@ -37,7 +37,7 @@ class TopicController extends Controller
 
         $topic = $request->user()->topics()->create([
             'title' => $validated['title'],
-            'description' => $validated['description'],
+            'description' => $validated['description'] ?? '',
             'opens_at' => $validated['opens_at'],
             'closes_at' => $validated['closes_at'],
         ]);
@@ -75,7 +75,7 @@ class TopicController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'opens_at' => 'required|date',
             'closes_at' => 'required|date|after:opens_at',
             'options' => 'required|array|min:2|max:10',
@@ -84,7 +84,7 @@ class TopicController extends Controller
 
         $topic->update([
             'title' => $validated['title'],
-            'description' => $validated['description'],
+            'description' => $validated['description'] ?? '',
             'opens_at' => $validated['opens_at'],
             'closes_at' => $validated['closes_at'],
         ]);
