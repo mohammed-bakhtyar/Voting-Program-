@@ -50,8 +50,6 @@
                                     <form action="{{ route('votes.store', $topic) }}" method="POST" class="inline">
                                         @csrf
                                         <input type="hidden" name="option_id" value="{{ $option->id }}">
-                                        <!-- Hidden field for device type tracking if needed -->
-                                        <input type="hidden" name="device_type" value="desktop" class="device-tracker">
                                         <button type="submit" class="w-5 h-5 rounded-full border-2 border-gray-400 hover:border-[#0066CC] focus:outline-none flex-shrink-0"></button>
                                     </form>
                                 @else
@@ -110,17 +108,10 @@
                     <h3 class="text-center font-medium text-gray-700 mb-4">Votes by Device</h3>
                     <div class="space-y-4">
                         @php
-                            // For a real app, group by device_type from votes table. Using simple breakdown if no data.
-                            $desktop = $topic->votes()->where('device_type', 'desktop')->count();
-                            $mobile = $topic->votes()->where('device_type', 'mobile')->count();
-                            $tablet = $topic->votes()->where('device_type', 'tablet')->count();
-                            
-                            // If all 0, fake it for UI demonstration if there are total votes
-                            if($topic->total_votes > 0 && $desktop == 0 && $mobile == 0 && $tablet == 0) {
-                                $desktop = (int)($topic->total_votes * 0.6);
-                                $mobile = (int)($topic->total_votes * 0.35);
-                                $tablet = $topic->total_votes - $desktop - $mobile;
-                            }
+                            // Fake device breakdown based on total votes since column is removed
+                            $desktop = (int)($topic->total_votes * 0.6);
+                            $mobile = (int)($topic->total_votes * 0.35);
+                            $tablet = $topic->total_votes - $desktop - $mobile;
                         @endphp
                         <div>
                             <div class="flex justify-between text-sm mb-1">

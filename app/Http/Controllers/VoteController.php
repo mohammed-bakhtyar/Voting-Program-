@@ -47,8 +47,7 @@ class VoteController extends Controller
         Vote::create([
             'user_id' => $userId,
             'topic_id' => $topic->id,
-            'option_id' => $optionId,
-            'device_type' => $request->device_type ?? 'desktop'
+            'option_id' => $optionId
         ]);
 
         $topic->options()->find($optionId)->increment('votes_count');
