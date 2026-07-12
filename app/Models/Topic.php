@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['title', 'description', 'opens_at', 'closes_at', 'closed_at', 'created_by'])]
+#[Fillable(['title', 'description', 'status', 'allow_multiple_votes', 'show_results_before_voting', 'opens_at', 'closes_at', 'closed_at', 'created_by'])]
 class Topic extends Model
 {
     protected function casts(): array

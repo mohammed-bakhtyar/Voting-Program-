@@ -11,11 +11,12 @@ class TopicController extends Controller
     public function index(Request $request)
     {
         $sort = $request->query('sort', 'latest');
+        $query = Topic::where('status', '!=', 'draft');
         
         if ($sort === 'popular') {
-            $topics = Topic::withCount('votes')->orderByDesc('votes_count')->latest()->get();
+            $topics = $query->withCount('votes')->orderByDesc('votes_count')->latest()->get();
         } else {
-            $topics = Topic::latest()->get();
+            $topics = $query->latest()->get();
         }
 
         return view('topics.index', compact('topics', 'sort'));

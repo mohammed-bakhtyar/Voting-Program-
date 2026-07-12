@@ -29,6 +29,9 @@ class TopicController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'status' => 'required|in:draft,active,closed',
+            'allow_multiple_votes' => 'boolean',
+            'show_results_before_voting' => 'boolean',
             'opens_at' => 'required|date',
             'closes_at' => 'required|date|after:opens_at',
             'options' => 'required|array|min:2|max:10',
@@ -38,6 +41,9 @@ class TopicController extends Controller
         $topic = $request->user()->topics()->create([
             'title' => $validated['title'],
             'description' => $validated['description'] ?? '',
+            'status' => $validated['status'] ?? 'active',
+            'allow_multiple_votes' => $validated['allow_multiple_votes'] ?? false,
+            'show_results_before_voting' => $validated['show_results_before_voting'] ?? true,
             'opens_at' => $validated['opens_at'],
             'closes_at' => $validated['closes_at'],
         ]);
@@ -76,6 +82,9 @@ class TopicController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'status' => 'required|in:draft,active,closed',
+            'allow_multiple_votes' => 'boolean',
+            'show_results_before_voting' => 'boolean',
             'opens_at' => 'required|date',
             'closes_at' => 'required|date|after:opens_at',
             'options' => 'required|array|min:2|max:10',
@@ -85,6 +94,9 @@ class TopicController extends Controller
         $topic->update([
             'title' => $validated['title'],
             'description' => $validated['description'] ?? '',
+            'status' => $validated['status'] ?? 'active',
+            'allow_multiple_votes' => $validated['allow_multiple_votes'] ?? false,
+            'show_results_before_voting' => $validated['show_results_before_voting'] ?? true,
             'opens_at' => $validated['opens_at'],
             'closes_at' => $validated['closes_at'],
         ]);

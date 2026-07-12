@@ -15,7 +15,7 @@
         
         <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2">Description</label>
-            <textarea name="description" class="w-full border rounded px-3 py-2" rows="4" required>{{ old('description', $topic->description) }}</textarea>
+            <textarea name="description" class="w-full border rounded px-3 py-2" rows="4">{{ old('description', $topic->description) }}</textarea>
         </div>
         
         <div class="flex space-x-4 mb-4">
@@ -27,6 +27,28 @@
                 <label class="block text-gray-700 font-bold mb-2">Closes At</label>
                 <input type="datetime-local" name="closes_at" value="{{ old('closes_at', $topic->closes_at->format('Y-m-d\TH:i')) }}" class="w-full border rounded px-3 py-2" required>
             </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2">Status</label>
+            <select name="status" class="w-full border rounded px-3 py-2">
+                <option value="draft" {{ old('status', $topic->status) === 'draft' ? 'selected' : '' }}>Draft</option>
+                <option value="active" {{ old('status', $topic->status) === 'active' ? 'selected' : '' }}>Active</option>
+                <option value="closed" {{ old('status', $topic->status) === 'closed' ? 'selected' : '' }}>Closed</option>
+            </select>
+        </div>
+
+        <div class="flex items-center space-x-6 mb-6 bg-gray-50 p-4 rounded border">
+            <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="hidden" name="allow_multiple_votes" value="0">
+                <input type="checkbox" name="allow_multiple_votes" value="1" {{ old('allow_multiple_votes', $topic->allow_multiple_votes) ? 'checked' : '' }} class="h-5 w-5 text-blue-600 rounded">
+                <span class="text-gray-700 font-medium">Allow Multiple Votes</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="hidden" name="show_results_before_voting" value="0">
+                <input type="checkbox" name="show_results_before_voting" value="1" {{ old('show_results_before_voting', $topic->show_results_before_voting) ? 'checked' : '' }} class="h-5 w-5 text-blue-600 rounded">
+                <span class="text-gray-700 font-medium">Show Results Upfront</span>
+            </label>
         </div>
 
         <div class="mb-6">
