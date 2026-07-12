@@ -23,6 +23,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Vote::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->is_admin || $this->account_type === 'admin';
+    }
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 

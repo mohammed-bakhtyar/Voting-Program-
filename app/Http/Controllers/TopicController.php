@@ -24,12 +24,17 @@ class TopicController extends Controller
 
     public function show(Topic $topic)
     {
+        $user = auth()->user();
+        
+        if ($topic->status === 'draft' && (!$user || !$user->isAdmin())) {
+            abort(404);
+        }
+
         $topic->load(['options' => function($q) { $q->orderBy('display_order'); }]);
         
-        $user = auth()->user();
         $hasVoted = $user ? $topic->votes()->where('user_id', $user->id)->exists() : false;
         
-        $isClosed = $topic->closed_at !== null || now()->isAfter($topic->closes_at);
+        $isClosed = $topic->is_closed;
         $showResults = $hasVoted || $isClosed;
 
         if ($showResults) {

@@ -54,7 +54,7 @@
                                             <div class="relative">
                                                 <div class="flex justify-between text-sm mb-1">
                                                     <span class="{{ $votedForThis ? 'font-bold text-[#0066CC]' : 'text-gray-700' }} flex items-center gap-2">
-                                                        @if(!$userVoted && now()->isBefore($topic->closes_at))
+                                                        @if(!$userVoted && !$topic->is_closed)
                                                             <form action="{{ route('votes.store', $topic) }}" method="POST" class="inline m-0 h-4">
                                                                 @csrf
                                                                 <input type="hidden" name="option_id" value="{{ $option->id }}">
@@ -74,7 +74,7 @@
                                         @else
                                             <!-- Before Vote -->
                                             <div class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded group">
-                                                @if(!$userVoted && now()->isBefore($topic->closes_at))
+                                                @if(!$userVoted && !$topic->is_closed)
                                                     <form action="{{ route('votes.store', $topic) }}" method="POST" class="inline m-0 h-5">
                                                         @csrf
                                                         <input type="hidden" name="option_id" value="{{ $option->id }}">
@@ -91,7 +91,7 @@
 
                                 <div class="mt-6 flex items-center justify-between border-t pt-4 text-sm">
                                     <div class="text-gray-500">
-                                        @if(now()->isAfter($topic->closes_at))
+                                        @if($topic->is_closed)
                                             <span class="text-red-500 font-medium">Closed</span>
                                         @else
                                             Closes in {{ now()->diffForHumans($topic->closes_at, true) }}

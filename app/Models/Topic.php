@@ -32,4 +32,9 @@ class Topic extends Model
     {
         return $this->hasMany(Vote::class);
     }
+
+    public function getIsClosedAttribute(): bool
+    {
+        return $this->status === 'closed' || $this->closed_at !== null || now()->isAfter($this->closes_at);
+    }
 }

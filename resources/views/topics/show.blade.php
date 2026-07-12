@@ -17,7 +17,7 @@
                 <span>•</span>
                 <span>📈 Total Votes: {{ number_format($topic->total_votes) }}</span>
                 <span>•</span>
-                @if(now()->isAfter($topic->closes_at))
+                @if($topic->is_closed)
                     <span class="text-red-500 font-medium">Closed</span>
                 @else
                     <span class="text-[#00AA00]">⏰ Closes in: {{ now()->diffForHumans($topic->closes_at, true) }}</span>
@@ -46,7 +46,7 @@
                     <div class="bg-white p-4 rounded border {{ $votedForThis ? 'border-[#0066CC] shadow-sm' : 'border-gray-200' }}">
                         <div class="flex justify-between items-center mb-2">
                             <div class="flex items-center space-x-2">
-                                @if(!$userVoted && now()->isBefore($topic->closes_at))
+                                @if(!$userVoted && !$topic->is_closed)
                                     <form action="{{ route('votes.store', $topic) }}" method="POST" class="inline">
                                         @csrf
                                         <input type="hidden" name="option_id" value="{{ $option->id }}">
@@ -64,7 +64,7 @@
                             @endif
                         </div>
                         
-                        @if($userVoted || $topic->show_results_before_voting || now()->isAfter($topic->closes_at))
+                        @if($userVoted || $topic->show_results_before_voting || $topic->is_closed)
                             <div class="pl-7 pr-2">
                                 <div class="flex justify-between text-xs text-gray-500 mb-1">
                                     <span>{{ $percentage }}%</span>
@@ -78,7 +78,7 @@
                     </div>
                 @endforeach
                 
-                @if($userVoted && now()->isBefore($topic->closes_at))
+                @if($userVoted && !$topic->is_closed)
                     <div class="mt-4 text-center">
                         <form action="{{ route('votes.destroy', $topic) }}" method="POST">
                             @csrf
@@ -90,7 +90,7 @@
             </div>
         </div>
 
-        @if($userVoted || now()->isAfter($topic->closes_at) || auth()->user()->account_type === 'admin' || auth()->user()->is_admin)
+        @if($userVoted || $topic->is_closed || (auth()->check() && auth()->user()->isAdmin()))
         <div class="p-8 border-t">
             <h2 class="text-xl font-bold text-gray-800 mb-6 uppercase tracking-wide text-center">Voting Statistics</h2>
             
