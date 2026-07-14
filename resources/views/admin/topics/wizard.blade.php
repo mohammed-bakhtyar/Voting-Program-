@@ -152,6 +152,10 @@
 </style>
 
 <div class="mb-8">
+    <a href="{{ route('admin.dashboard') }}" class="vp-btn vp-btn-ghost mb-4" style="display:inline-flex; border: none; padding-left: 0; margin-bottom: 12px; opacity: 0.8;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="width:16px; height:16px;"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to Dashboard
+    </a>
     <h1 class="vp-section-title">Create New Poll</h1>
     <p class="vp-section-sub">Configure your new voting topic and its options.</p>
 </div>
