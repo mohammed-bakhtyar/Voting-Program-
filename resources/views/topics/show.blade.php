@@ -253,7 +253,7 @@
                 $votedForThis = $userVoted && $topic->votes()->where('user_id', auth()->id())->where('option_id', $option->id)->exists();
                 $percentage   = $topic->total_votes > 0 ? round(($option->votes_count / $topic->total_votes) * 100) : 0;
                 $isVip        = $option->is_vip;
-                $isLocked     = $userVoted && !$topic->allow_multiple_votes && !$votedForThis;
+                $isLocked     = !$topic->is_closed && $userVoted && !$topic->allow_multiple_votes && !$votedForThis;
             @endphp
 
             <div class="vote-option-card stagger-item {{ $votedForThis ? 'my-pick' : '' }} {{ $isVip ? 'vip-option' : '' }} {{ $isLocked ? 'locked-option' : '' }}"

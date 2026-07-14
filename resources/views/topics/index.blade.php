@@ -258,7 +258,7 @@
                                 $votedForThis = $userVoted && $topic->votes()->where('user_id', auth()->id())->where('option_id', $option->id)->exists();
                                 $percentage = $topic->total_votes > 0 ? round(($option->votes_count / $topic->total_votes) * 100) : 0;
                                 $isVip = $option->is_vip;
-                                $isLocked = !$topic->allow_multiple_votes && $userVoted && !$votedForThis;
+                                $isLocked = !$topic->is_closed && !$topic->allow_multiple_votes && $userVoted && !$votedForThis;
                             @endphp
 
                             @if($userVoted || $topic->show_results_before_voting)
