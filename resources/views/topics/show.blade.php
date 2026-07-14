@@ -48,14 +48,16 @@
         background: rgba(255,255,255,0.03);
         border: 1px solid rgba(255,255,255,0.07);
         border-radius: 14px;
-        padding: 16px 20px;
-        margin-bottom: 12px;
-        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        cursor: default;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
-        overflow: hidden;
     }
-    .vote-option-card:hover { border-color: rgba(99,102,241,0.25); background: rgba(99,102,241,0.04); }
+    .vote-option-card:hover:not(.locked-option) {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-color: rgba(99,102,241,0.2);
+    }
     .vote-option-card.my-pick {
         border-color: rgba(99,102,241,0.45);
         background: rgba(99,102,241,0.08);
@@ -254,9 +256,10 @@
                 $isLocked     = $userVoted && !$topic->allow_multiple_votes && !$votedForThis;
             @endphp
 
-            <div class="vote-option-card {{ $votedForThis ? 'my-pick' : '' }} {{ $isVip ? 'vip-option' : '' }} {{ $isLocked ? 'locked-option' : '' }}"
+            <div class="vote-option-card stagger-item {{ $votedForThis ? 'my-pick' : '' }} {{ $isVip ? 'vip-option' : '' }} {{ $isLocked ? 'locked-option' : '' }}"
                  data-option-id="{{ $option->id }}"
-                 data-is-vip="{{ $isVip ? '1' : '0' }}">
+                 data-is-vip="{{ $isVip ? '1' : '0' }}"
+                 style="animation-delay: {{ $loop->iteration * 0.1 }}s;">
 
                 <div class="vote-option-top">
                     <div class="vote-option-left">
@@ -428,7 +431,7 @@
             const isLocked     = hasVoted && !allowMultipleVotes && !isMyPick;
 
             // Card classes
-            card.className = 'vote-option-card' + (isMyPick ? ' my-pick' : '') + (isVip ? ' vip-option' : '') + (isLocked ? ' locked-option' : '');
+            card.className = 'vote-option-card stagger-item' + (isMyPick ? ' my-pick' : '') + (isVip ? ' vip-option' : '') + (isLocked ? ' locked-option' : '');
 
             // Indicator
             const existingBtn = card.querySelector('[data-ajax="vote"]');

@@ -72,7 +72,7 @@
 </style>
 
 {{-- Hero --}}
-<div class="dash-hero">
+<div class="dash-hero stagger-item" style="animation-delay: 0.1s;">
     <div class="dash-orb dash-orb-1"></div>
     <div class="dash-orb dash-orb-2"></div>
     <div class="dash-hero-name">Welcome back, {{ auth()->user()->name }}! 👋</div>
@@ -84,7 +84,7 @@
 
 {{-- Action Cards --}}
 <div class="dash-grid">
-    <div class="dash-action-card">
+    <div class="dash-action-card stagger-item" style="animation-delay: 0.2s;">
         <div class="dash-action-icon" style="background:rgba(16,185,129,0.12);">🗳️</div>
         <div class="dash-action-title">Explore Polls</div>
         <p class="dash-action-desc">Browse all active polls, cast your votes, and see what others are thinking right now.</p>
@@ -95,7 +95,7 @@
     </div>
 
     @if(auth()->user()->isAdmin())
-    <div class="dash-action-card">
+    <div class="dash-action-card stagger-item" style="animation-delay: 0.3s;">
         <div class="dash-action-icon" style="background:rgba(99,102,241,0.12);">⚙️</div>
         <div class="dash-action-title">Admin Panel</div>
         <p class="dash-action-desc">Create new topics, manage existing polls, and view detailed voting statistics and charts.</p>
@@ -105,7 +105,7 @@
         </a>
     </div>
     @else
-    <div class="dash-action-card">
+    <div class="dash-action-card stagger-item" style="animation-delay: 0.3s;">
         <div class="dash-action-icon" style="background:rgba(139,92,246,0.12);">⭐</div>
         <div class="dash-action-title">Your Activity</div>
         <p class="dash-action-desc">Thank you for participating! Your voice matters in shaping the community's results.</p>

@@ -37,6 +37,45 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Space Background */
+        .ambient-bg {
+            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            pointer-events: none; z-index: -1;
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05), transparent 60%),
+                        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05), transparent 50%);
+            animation: slowRotate 40s linear infinite;
+        }
+
+        @keyframes slowRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Global Keyframes */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); transform: scale(1); }
+            50% { box-shadow: 0 0 10px 4px rgba(99, 102, 241, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); transform: scale(1); }
+        }
+
+        @keyframes floatEffect {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .stagger-item {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         /* ---- Scrollbar ---- */
@@ -77,6 +116,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+            animation: pulseGlow 4s infinite ease-in-out;
         }
         .vp-logo-icon svg { width: 18px; height: 18px; color: white; }
         .vp-logo-text { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
@@ -243,6 +283,7 @@
     </style>
 </head>
 <body>
+    <div class="ambient-bg"></div>
     <nav class="vp-nav">
         <div class="vp-nav-inner">
             <a href="{{ route('topics.index') }}" class="vp-logo">

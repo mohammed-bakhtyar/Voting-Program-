@@ -16,9 +16,9 @@
         overflow: hidden;
     }
     .poll-card:hover {
-        border-color: rgba(99,102,241,0.35);
-        box-shadow: 0 8px 32px rgba(99,102,241,0.1);
-        transform: translateY(-2px);
+        border-color: rgba(99,102,241,0.3);
+        box-shadow: 0 10px 30px rgba(99,102,241,0.15);
+        transform: translateY(-5px);
     }
     .poll-card::before {
         content: '';
@@ -194,14 +194,15 @@
         </div>
     @else
         <div class="polls-grid">
-            @foreach($topics as $topic)
+            @forelse($topics as $topic)
                 @php
-                    $userVoted = $topic->votes()->where('user_id', auth()->id())->exists();
+                    $userVoted = auth()->check() && $topic->votes()->where('user_id', auth()->id())->exists();
+                    $isDraft = $topic->is_draft ?? false;
                     $isVip = $loop->first && isset($sort) && $sort === 'popular' && $topic->total_votes > 0;
                 @endphp
-
-                <div class="poll-card {{ $isVip ? 'vip-card' : '' }}">
-                    {{-- Card Header --}}
+                @if(!$isDraft)
+                    <a href="{{ route('topics.show', $topic) }}" class="poll-card stagger-item {{ $isVip ? 'vip-card' : '' }}" style="text-decoration:none; animation-delay: {{ $loop->iteration * 0.1 }}s;">
+                        {{-- Card Header --}}
                     <div class="poll-card-header">
                         <h2 style="flex:1;">
                             <a href="{{ route('topics.show', $topic) }}" class="poll-title">{{ $topic->title }}</a>
