@@ -140,6 +140,17 @@
     }
     @keyframes tagIn { from { opacity:0; transform: scale(0.8); } to { opacity:1; transform: scale(1); } }
 
+    /* Locked Option */
+    .vote-option-card.locked-option {
+        opacity: 0.5;
+        filter: grayscale(80%);
+        cursor: not-allowed;
+    }
+    .locked-icon {
+        display: inline-flex; align-items: center; justify-content: center;
+        color: #94a3b8; width: 24px; height: 24px;
+    }
+
     /* Progress bars */
     .vote-bar-wrap { padding-left: 34px; }
     .vote-bar-info { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; margin-bottom: 6px; transition: all 0.4s ease; }
@@ -240,9 +251,10 @@
                 $votedForThis = $userVoted && $topic->votes()->where('user_id', auth()->id())->where('option_id', $option->id)->exists();
                 $percentage   = $topic->total_votes > 0 ? round(($option->votes_count / $topic->total_votes) * 100) : 0;
                 $isVip        = $option->is_vip;
+                $isLocked     = $userVoted && !$topic->allow_multiple_votes && !$votedForThis;
             @endphp
 
-            <div class="vote-option-card {{ $votedForThis ? 'my-pick' : '' }} {{ $isVip ? 'vip-option' : '' }}"
+            <div class="vote-option-card {{ $votedForThis ? 'my-pick' : '' }} {{ $isVip ? 'vip-option' : '' }} {{ $isLocked ? 'locked-option' : '' }}"
                  data-option-id="{{ $option->id }}"
                  data-is-vip="{{ $isVip ? '1' : '0' }}">
 
@@ -266,6 +278,8 @@
                             <div class="vote-indicator {{ $votedForThis ? ($isVip ? 'vip-picked' : 'picked') : 'empty' }}">
                                 @if($votedForThis)
                                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                @elseif($isLocked)
+                                    <svg class="locked-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                 @endif
                             </div>
                         @endif
@@ -411,9 +425,10 @@
             const isVip        = card.dataset.isVip === '1';
             const isMyPick     = currentVotedOptions.includes(optData.id);
             const showResults  = hasVoted || showResultsBefore || isClosed;
+            const isLocked     = hasVoted && !allowMultipleVotes && !isMyPick;
 
             // Card classes
-            card.classList.toggle('my-pick', isMyPick);
+            card.className = 'vote-option-card' + (isMyPick ? ' my-pick' : '') + (isVip ? ' vip-option' : '') + (isLocked ? ' locked-option' : '');
 
             // Indicator
             const existingBtn = card.querySelector('[data-ajax="vote"]');
@@ -431,13 +446,15 @@
                     ind.className = 'vote-indicator ' + (isMyPick ? (isVip ? 'vip-picked' : 'picked') : 'empty');
                     if (isMyPick) {
                         ind.innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
+                    } else if (isLocked) {
+                        ind.innerHTML = `<svg class="locked-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>`;
                     }
                     existingBtn.replaceWith(ind);
                 } else if (existingIndicator) {
                     existingIndicator.className = 'vote-indicator ' + (isMyPick ? (isVip ? 'vip-picked' : 'picked') : 'empty');
                     existingIndicator.innerHTML = isMyPick
                         ? `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`
-                        : '';
+                        : (isLocked ? `<svg class="locked-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>` : '');
                 }
             } else {
                 // Restore clickable buttons if vote removed or allowed to vote more

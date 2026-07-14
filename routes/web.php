@@ -6,12 +6,16 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\Admin\TopicController as AdminTopicController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [TopicController::class, 'index'])->name('topics.index');
-Route::get('/topics/{topic}', [TopicController::class, 'show'])->name('topics.show');
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+Route::get('/polls', [TopicController::class, 'index'])->name('topics.index');
+Route::get('/polls/{topic}', [TopicController::class, 'show'])->name('topics.show');
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/topics/{topic}/vote', [VoteController::class, 'store'])->name('votes.store');
-    Route::delete('/topics/{topic}/vote', [VoteController::class, 'destroy'])->name('votes.destroy');
+    Route::post('/polls/{topic}/vote', [VoteController::class, 'store'])->name('votes.store');
+    Route::delete('/polls/{topic}/vote', [VoteController::class, 'destroy'])->name('votes.destroy');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
