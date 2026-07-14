@@ -259,7 +259,7 @@
                                                 $canVoteForThis = !$topic->is_closed && (!$userVoted || ($topic->allow_multiple_votes && !$votedForThis));
                                             @endphp
                                             @if($canVoteForThis)
-                                                <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;">
+                                                <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;" onsubmit="this.querySelector('button').style.opacity='0.5'; this.querySelector('button').style.pointerEvents='none';">
                                                     @csrf
                                                     <input type="hidden" name="option_id" value="{{ $option->id }}">
                                                     <button type="submit" class="vote-radio-btn" style="{{ $isVip ? 'border-color:#f59e0b;' : '' }}" title="Vote for {{ $option->label }}"><div class="vote-radio-dot static"></div></button>
@@ -287,7 +287,7 @@
                                             $canVoteForThis = !$topic->is_closed && (!$userVoted || ($topic->allow_multiple_votes && !$votedForThis));
                                         @endphp
                                         @if($canVoteForThis)
-                                            <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;">
+                                            <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;" onsubmit="this.querySelector('button').style.opacity='0.5'; this.querySelector('button').style.pointerEvents='none';">
                                                 @csrf
                                                 <input type="hidden" name="option_id" value="{{ $option->id }}">
                                                 <button type="submit" class="vote-radio-btn" style="{{ $isVip ? 'border-color:#f59e0b;' : '' }}" title="Vote for {{ $option->label }}"><div class="vote-radio-dot static"></div></button>

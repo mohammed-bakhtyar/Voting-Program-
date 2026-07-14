@@ -506,8 +506,14 @@
         }
     }
 
+    let isVoting = false;
+
     /** Send vote via AJAX */
     async function sendVote(url, optionId) {
+        if (isVoting) return;
+        isVoting = true;
+        document.querySelectorAll('.vote-btn-submit, .remove-vote-btn').forEach(b => { b.style.opacity = '0.5'; b.style.pointerEvents = 'none'; });
+
         const fd = new FormData();
         fd.append('_token', CSRF);
         fd.append('option_id', optionId);
@@ -521,10 +527,18 @@
             const data = await res.json();
             if (data.success) applyVoteUpdate(data);
         } catch(e) { console.error('Vote error', e); }
+        finally {
+            isVoting = false;
+            document.querySelectorAll('.vote-btn-submit, .remove-vote-btn').forEach(b => { b.style.opacity = '1'; b.style.pointerEvents = 'auto'; });
+        }
     }
 
     /** Send remove-vote via AJAX */
     async function sendRemove(url, csrf) {
+        if (isVoting) return;
+        isVoting = true;
+        document.querySelectorAll('.vote-btn-submit, .remove-vote-btn').forEach(b => { b.style.opacity = '0.5'; b.style.pointerEvents = 'none'; });
+
         const fd = new FormData();
         fd.append('_token', csrf);
         fd.append('_method', 'DELETE');
@@ -538,6 +552,10 @@
             const data = await res.json();
             if (data.success) applyVoteUpdate(data);
         } catch(e) { console.error('Remove error', e); }
+        finally {
+            isVoting = false;
+            document.querySelectorAll('.vote-btn-submit, .remove-vote-btn').forEach(b => { b.style.opacity = '1'; b.style.pointerEvents = 'auto'; });
+        }
     }
 
     function attachVoteBtn(btn) {

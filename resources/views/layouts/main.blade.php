@@ -336,28 +336,7 @@
             if (event.persisted) { window.location.reload(); }
         });
 
-        // 2. Prevent Form POSTs from pushing extra history states (PRG fix)
-        // Skip forms marked data-ajax (handled by page-level JS)
-        document.addEventListener('submit', async function(e) {
-            const form = e.target;
-            if (form.dataset.ajax) return; // let page-level handler deal with it
-            if (form.tagName === 'FORM' && form.method.toLowerCase() === 'post') {
-                e.preventDefault();
-                const btn = form.querySelector('button[type="submit"]');
-                if (btn) { btn.style.opacity = '0.5'; btn.style.pointerEvents = 'none'; }
-                try {
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        body: new FormData(form)
-                    });
-                    if (response.url === window.location.href) {
-                        window.location.reload();
-                    } else {
-                        window.location.replace(response.url);
-                    }
-                } catch (err) { form.submit(); }
-            }
-        });
+
 
         // 3. Animate progress bars on page load
         document.addEventListener('DOMContentLoaded', function() {
