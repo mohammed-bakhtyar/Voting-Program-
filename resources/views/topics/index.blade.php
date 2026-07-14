@@ -201,7 +201,7 @@
                     $isVip = $loop->first && isset($sort) && $sort === 'popular' && $topic->total_votes > 0;
                 @endphp
                 @if(!$isDraft)
-                    <div class="poll-card stagger-item {{ $isVip ? 'vip-card' : '' }}" style="animation-delay: {{ $loop->iteration * 0.1 }}s;">
+                    <div id="poll-card-{{ $topic->id }}" class="poll-card stagger-item {{ $isVip ? 'vip-card' : '' }}" style="animation-delay: {{ $loop->iteration * 0.1 }}s;">
                         {{-- Card Header --}}
                     <div class="poll-card-header">
                         <h2 style="flex:1;">
@@ -325,4 +325,59 @@
         </div>
     @endif
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Intercept vote form submissions on the index page
+    document.addEventListener('submit', async function(e) {
+        if (e.target.matches('form[action*="/vote"]')) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const pollCard = form.closest('.poll-card');
+            const cardId = pollCard.id; // e.g. poll-card-7
+            
+            // Visual loading state
+            pollCard.style.opacity = '0.6';
+            pollCard.style.pointerEvents = 'none';
+            pollCard.style.transition = 'opacity 0.3s';
+            
+            const fd = new FormData(form);
+            
+            try {
+                // Submit vote. Fetch automatically follows the redirect back to this page.
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: fd,
+                    headers: { 'Accept': 'text/html' }
+                });
+                
+                const htmlText = await response.text();
+                
+                // Parse the new page HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                
+                // Find the updated poll card
+                const updatedCard = doc.getElementById(cardId);
+                
+                if (updatedCard) {
+                    // Replace the inner HTML smoothly
+                    pollCard.innerHTML = updatedCard.innerHTML;
+                } else {
+                    // Fallback to reload if card not found
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Voting error:', error);
+                window.location.reload();
+            } finally {
+                // Restore state
+                pollCard.style.opacity = '1';
+                pollCard.style.pointerEvents = 'auto';
+            }
+        }
+    });
+});
+</script>
 @endsection
