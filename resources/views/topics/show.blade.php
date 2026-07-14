@@ -144,9 +144,11 @@
 
     /* Locked Option */
     .vote-option-card.locked-option {
-        opacity: 0.5;
-        filter: grayscale(80%);
+        opacity: 0.4;
+        filter: grayscale(100%);
         cursor: not-allowed;
+        pointer-events: none;
+        user-select: none;
     }
     .locked-icon {
         display: inline-flex; align-items: center; justify-content: center;
@@ -253,7 +255,7 @@
                 $votedForThis = $userVoted && $topic->votes()->where('user_id', auth()->id())->where('option_id', $option->id)->exists();
                 $percentage   = $topic->total_votes > 0 ? round(($option->votes_count / $topic->total_votes) * 100) : 0;
                 $isVip        = $option->is_vip;
-                $isLocked     = $userVoted && !$topic->allow_multiple_votes && !$votedForThis;
+                $isLocked     = ($topic->is_closed && !$votedForThis) || (!$topic->allow_multiple_votes && $userVoted && !$votedForThis);
             @endphp
 
             <div class="vote-option-card stagger-item {{ $votedForThis ? 'my-pick' : '' }} {{ $isVip ? 'vip-option' : '' }} {{ $isLocked ? 'locked-option' : '' }}"

@@ -143,9 +143,10 @@
 
     /* Locked Option */
     .option-row.locked-option {
-        opacity: 0.5;
-        filter: grayscale(80%);
+        opacity: 0.4;
+        filter: grayscale(100%);
         pointer-events: none;
+        user-select: none;
     }
 
     @keyframes vip-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
@@ -258,7 +259,7 @@
                                 $votedForThis = $userVoted && $topic->votes()->where('user_id', auth()->id())->where('option_id', $option->id)->exists();
                                 $percentage = $topic->total_votes > 0 ? round(($option->votes_count / $topic->total_votes) * 100) : 0;
                                 $isVip = $option->is_vip;
-                                $isLocked = !$topic->allow_multiple_votes && $userVoted && !$votedForThis;
+                                $isLocked = ($topic->is_closed && !$votedForThis) || (!$topic->allow_multiple_votes && $userVoted && !$votedForThis);
                             @endphp
 
                             @if($userVoted || $topic->show_results_before_voting)
