@@ -255,7 +255,10 @@
                                 <div class="option-row {{ $votedForThis ? 'my-vote' : '' }} {{ $isVip ? 'vip-row' : '' }}">
                                     <div class="option-row-top">
                                         <div class="option-row-left">
-                                            @if(!$userVoted && !$topic->is_closed)
+                                            @php
+                                                $canVoteForThis = !$topic->is_closed && (!$userVoted || ($topic->allow_multiple_votes && !$votedForThis));
+                                            @endphp
+                                            @if($canVoteForThis)
                                                 <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;">
                                                     @csrf
                                                     <input type="hidden" name="option_id" value="{{ $option->id }}">
@@ -280,7 +283,10 @@
                             @else
                                 <div class="option-row {{ $isVip ? 'vip-row' : '' }}">
                                     <div class="option-row-simple">
-                                        @if(!$userVoted && !$topic->is_closed)
+                                        @php
+                                            $canVoteForThis = !$topic->is_closed && (!$userVoted || ($topic->allow_multiple_votes && !$votedForThis));
+                                        @endphp
+                                        @if($canVoteForThis)
                                             <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;">
                                                 @csrf
                                                 <input type="hidden" name="option_id" value="{{ $option->id }}">

@@ -248,7 +248,10 @@
 
                 <div class="vote-option-top">
                     <div class="vote-option-left">
-                        @if(!$userVoted && !$topic->is_closed)
+                        @php
+                            $canVoteForThis = !$topic->is_closed && (!$userVoted || ($topic->allow_multiple_votes && !$votedForThis));
+                        @endphp
+                        @if($canVoteForThis)
                             {{-- Clickable radio btn (AJAX vote) --}}
                             <button type="button"
                                 class="vote-btn-submit {{ $isVip ? 'vip-vote-btn' : '' }}"
@@ -379,17 +382,17 @@
 <script>
 (function() {
     const CSRF = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    let currentVotedOptionId = {{ $userVoted ? $topic->votes()->where('user_id', auth()->id())->value('option_id') : 'null' }};
-    let hasVoted = {{ $userVoted ? 'true' : 'false' }};
+    let currentVotedOptions = {!! json_encode($userVoted ? $topic->votes()->where('user_id', auth()->id())->pluck('option_id') : []) !!};
+    let hasVoted = currentVotedOptions.length > 0;
     const isClosed = {{ $topic->is_closed ? 'true' : 'false' }};
     const showResultsBefore = {{ $topic->show_results_before_voting ? 'true' : 'false' }};
+    const allowMultipleVotes = {{ $topic->allow_multiple_votes ? 'true' : 'false' }};
 
     /** Update ALL option cards with new server data */
     function applyVoteUpdate(data) {
         const totalVotes   = data.total_votes;
-        const votedOptionId = data.voted_option;
-        currentVotedOptionId = votedOptionId;
-        hasVoted = votedOptionId !== null;
+        currentVotedOptions = data.voted_options || [];
+        hasVoted = currentVotedOptions.length > 0;
 
         // Update total votes display
         document.getElementById('total-votes-num').textContent = totalVotes.toLocaleString();
@@ -406,7 +409,7 @@
             if (!card) return;
 
             const isVip        = card.dataset.isVip === '1';
-            const isMyPick     = optData.id === votedOptionId;
+            const isMyPick     = currentVotedOptions.includes(optData.id);
             const showResults  = hasVoted || showResultsBefore || isClosed;
 
             // Card classes
@@ -416,7 +419,12 @@
             const existingBtn = card.querySelector('[data-ajax="vote"]');
             const existingIndicator = card.querySelector('.vote-indicator');
 
-            if (hasVoted) {
+            // Determine if this specific option should be locked
+            // It is locked if: 1. the poll is closed OR 2. we don't allow multiple votes and they voted for something
+            // OR 3. they voted for THIS option (so they can't vote for it again)
+            const shouldBeLocked = isClosed || isMyPick || (hasVoted && !allowMultipleVotes);
+
+            if (shouldBeLocked) {
                 // Remove all clickable vote buttons, replace with static indicator
                 if (existingBtn) {
                     const ind = document.createElement('div');
@@ -432,7 +440,7 @@
                         : '';
                 }
             } else {
-                // Restore clickable buttons if vote removed
+                // Restore clickable buttons if vote removed or allowed to vote more
                 if (existingIndicator) {
                     const btn = document.createElement('button');
                     btn.type = 'button';

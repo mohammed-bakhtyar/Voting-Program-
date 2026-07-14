@@ -59,9 +59,10 @@ class VoteController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
             $topic->refresh();
             $topic->load(['options' => fn($q) => $q->orderBy('display_order')]);
+            $votedOptions = $topic->votes()->where('user_id', $userId)->pluck('option_id')->toArray();
             return response()->json([
-                'success'     => true,
-                'voted_option'=> (int) $optionId,
+                'success'       => true,
+                'voted_options' => $votedOptions,
                 'total_votes' => $topic->total_votes,
                 'options'     => $topic->options->map(fn($o) => [
                     'id'          => $o->id,
@@ -93,8 +94,8 @@ class VoteController extends Controller
             $topic->refresh();
             $topic->load(['options' => fn($q) => $q->orderBy('display_order')]);
             return response()->json([
-                'success'     => true,
-                'voted_option'=> null,
+                'success'       => true,
+                'voted_options' => [],
                 'total_votes' => $topic->total_votes,
                 'options'     => $topic->options->map(fn($o) => [
                     'id'          => $o->id,
