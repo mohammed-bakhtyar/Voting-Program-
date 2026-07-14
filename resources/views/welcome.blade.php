@@ -62,41 +62,37 @@
         .planet-2 { width: 80px; height: 80px; background: linear-gradient(135deg, #f43f5e, #a855f7); bottom: 20%; left: 15%; filter: blur(2px); opacity: 0.7; }
         .planet-3 { width: 250px; height: 250px; background: radial-gradient(circle at 30% 30%, #312e81, #0f172a); bottom: -10%; right: -5%; border: 1px solid rgba(255,255,255,0.05); }
 
-        .float-card {
+        .float-img {
             position: absolute;
-            background: rgba(20, 21, 37, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 99px;
-            padding: 12px 24px;
-            color: #f8fafc;
-            font-weight: 600;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+            width: 160px;
+            height: 160px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 30px rgba(99,102,241,0.2);
             pointer-events: auto;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.1);
         }
-        .float-card:hover { border-color: rgba(99, 102, 241, 0.4); transform: scale(1.05); }
-        .float-card .pulse { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulseGlow 2s infinite; }
-        .float-card .vip-icon { font-size: 16px; }
+        .float-img:hover { transform: scale(1.15) rotate(5deg) !important; border-color: rgba(99, 102, 241, 0.6); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 50px rgba(99,102,241,0.4); z-index: 50; }
 
-        .float-card-1 {
-            top: 25%; left: 15%;
-            animation: floatCard 6s ease-in-out infinite;
+        .float-img-1 {
+            top: 20%; left: 15%;
+            animation: floatImg1 8s ease-in-out infinite;
         }
-        .float-card-2 {
-            bottom: 30%; right: 15%;
-            animation: floatCard 8s ease-in-out infinite reverse;
+        .float-img-2 {
+            bottom: 25%; right: 15%;
+            animation: floatImg2 10s ease-in-out infinite reverse;
         }
 
-        @keyframes floatCard {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+        @keyframes floatImg1 {
+            0% { transform: translateY(0px) rotate(-8deg); }
+            50% { transform: translateY(-25px) rotate(0deg); }
+            100% { transform: translateY(0px) rotate(-8deg); }
+        }
+        @keyframes floatImg2 {
+            0% { transform: translateY(0px) rotate(8deg); }
+            50% { transform: translateY(-30px) rotate(15deg); }
+            100% { transform: translateY(0px) rotate(8deg); }
         }
 
         /* Hero Text */
@@ -212,15 +208,8 @@
         <div class="layer" data-speed="0.8">
             <div class="planet planet-3"></div>
             
-            <div class="float-card float-card-1">
-                <div class="pulse"></div>
-                Live 10k+ Votes
-            </div>
-            
-            <div class="float-card float-card-2">
-                <span class="vip-icon">👑</span>
-                VIP System
-            </div>
+            <img src="{{ asset('img/island.png') }}" class="float-img float-img-1" alt="Island">
+            <img src="{{ asset('img/tickets.png') }}" class="float-img float-img-2" alt="Tickets">
         </div>
 
         <!-- Content -->
