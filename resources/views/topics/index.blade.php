@@ -140,6 +140,14 @@
     .option-row.vip-row:hover { border-color: rgba(251,191,36,0.45); background: rgba(251,191,36,0.07); }
     .option-row.vip-row.my-vote { border-color: rgba(251,191,36,0.55); box-shadow: 0 0 0 1px rgba(251,191,36,0.15); }
     .option-bar-fill.vip-bar { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+    /* Locked Option */
+    .option-row.locked-option {
+        opacity: 0.5;
+        filter: grayscale(80%);
+        pointer-events: none;
+    }
+
     @keyframes vip-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
     .vip-option-tag { display:inline-flex; align-items:center; gap:3px; padding:1px 7px; border-radius:99px; background:rgba(251,191,36,0.12); color:#fbbf24; border:1px solid rgba(251,191,36,0.25); font-size:10px; font-weight:800; text-transform:uppercase; margin-left:6px; letter-spacing:0.05em; }
     .sort-select {
@@ -250,10 +258,11 @@
                                 $votedForThis = $userVoted && $topic->votes()->where('user_id', auth()->id())->where('option_id', $option->id)->exists();
                                 $percentage = $topic->total_votes > 0 ? round(($option->votes_count / $topic->total_votes) * 100) : 0;
                                 $isVip = $option->is_vip;
+                                $isLocked = !$topic->allow_multiple_votes && $userVoted && !$votedForThis;
                             @endphp
 
                             @if($userVoted || $topic->show_results_before_voting)
-                                <div class="option-row {{ $votedForThis ? 'my-vote' : '' }} {{ $isVip ? 'vip-row' : '' }}">
+                                <div class="option-row {{ $votedForThis ? 'my-vote' : '' }} {{ $isVip ? 'vip-row' : '' }} {{ $isLocked ? 'locked-option' : '' }}">
                                     <div class="option-row-top">
                                         <div class="option-row-left">
                                             @php
