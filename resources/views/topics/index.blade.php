@@ -194,7 +194,7 @@
         </div>
     @else
         <div class="polls-grid">
-            @forelse($topics as $topic)
+            @foreach($topics as $topic)
                 @php
                     $userVoted = auth()->check() && $topic->votes()->where('user_id', auth()->id())->exists();
                     $isDraft = $topic->is_draft ?? false;
@@ -319,7 +319,8 @@
                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
-                </div>
+                    </a>
+                @endif
             @endforeach
         </div>
     @endif
