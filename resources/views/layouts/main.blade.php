@@ -141,11 +141,12 @@
         .vp-btn svg { width: 15px; height: 15px; }
 
         .vp-btn-ghost {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .vp-btn-ghost:hover { background: var(--bg-card); color: var(--text); border-color: rgba(255,255,255,0.15); }
+        .vp-btn-ghost:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
 
         .vp-btn-primary {
             background: linear-gradient(135deg, var(--primary), #8b5cf6);
@@ -155,18 +156,20 @@
         .vp-btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.4); }
 
         .vp-btn-admin {
-            background: rgba(124,58,237,0.15);
-            color: #a78bfa;
-            border: 1px solid rgba(124,58,237,0.25);
+            background: rgba(139,92,246,0.1);
+            color: #d8b4fe;
+            border: 1px solid rgba(139,92,246,0.2);
+            box-shadow: 0 2px 10px rgba(139,92,246,0.05);
         }
-        .vp-btn-admin:hover { background: rgba(124,58,237,0.25); color: #c4b5fd; }
+        .vp-btn-admin:hover { background: rgba(139,92,246,0.18); color: #f3e8ff; border-color: rgba(139,92,246,0.3); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(139,92,246,0.15); }
 
         .vp-btn-danger {
-            background: rgba(239,68,68,0.1);
-            color: #f87171;
-            border: 1px solid rgba(239,68,68,0.2);
+            background: rgba(239,68,68,0.08);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,0.15);
+            box-shadow: 0 2px 10px rgba(239,68,68,0.05);
         }
-        .vp-btn-danger:hover { background: rgba(239,68,68,0.2); color: #fca5a5; }
+        .vp-btn-danger:hover { background: rgba(239,68,68,0.15); color: #fecaca; border-color: rgba(239,68,68,0.3); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(239,68,68,0.15); }
 
         /* ---- Main Content ---- */
         .vp-main {
