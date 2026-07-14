@@ -348,8 +348,7 @@
                 try {
                     const response = await fetch(form.action, {
                         method: 'POST',
-                        body: new FormData(form),
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        body: new FormData(form)
                     });
                     if (response.url === window.location.href) {
                         window.location.reload();
