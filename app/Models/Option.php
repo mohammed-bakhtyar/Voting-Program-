@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-
-#[Fillable(['topic_id', 'label', 'order'])]
 class Option extends Model
 {
+    protected $fillable = ['topic_id', 'label', 'display_order', 'is_vip', 'votes_count'];
+
+    protected $casts = [
+        'is_vip' => 'boolean',
+    ];
+
     public function topic()
     {
         return $this->belongsTo(Topic::class);

@@ -123,7 +123,25 @@
     .view-details-btn:hover { background: rgba(99,102,241,0.2); color: #a5b4fc; transform: translateX(2px); }
     .view-details-btn svg { width: 14px; height: 14px; }
 
-    /* Sort control */
+    /* VIP option row */
+    .option-row.vip-row {
+        border-color: rgba(251,191,36,0.25);
+        background: rgba(251,191,36,0.04);
+        position: relative;
+        overflow: hidden;
+    }
+    .option-row.vip-row::before {
+        content: '';
+        position: absolute; top: 0; left: 0; right: 0; height: 2px;
+        background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+        animation: vip-shimmer 2.5s linear infinite;
+        background-size: 200% 100%;
+    }
+    .option-row.vip-row:hover { border-color: rgba(251,191,36,0.45); background: rgba(251,191,36,0.07); }
+    .option-row.vip-row.my-vote { border-color: rgba(251,191,36,0.55); box-shadow: 0 0 0 1px rgba(251,191,36,0.15); }
+    .option-bar-fill.vip-bar { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    @keyframes vip-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .vip-option-tag { display:inline-flex; align-items:center; gap:3px; padding:1px 7px; border-radius:99px; background:rgba(251,191,36,0.12); color:#fbbf24; border:1px solid rgba(251,191,36,0.25); font-size:10px; font-weight:800; text-transform:uppercase; margin-left:6px; letter-spacing:0.05em; }
     .sort-select {
         background: rgba(255,255,255,0.05);
         border: 1px solid rgba(255,255,255,0.1);
@@ -230,50 +248,51 @@
                             @php
                                 $votedForThis = $userVoted && $topic->votes()->where('user_id', auth()->id())->where('option_id', $option->id)->exists();
                                 $percentage = $topic->total_votes > 0 ? round(($option->votes_count / $topic->total_votes) * 100) : 0;
+                                $isVip = $option->is_vip;
                             @endphp
 
                             @if($userVoted || $topic->show_results_before_voting)
-                                <div class="option-row {{ $votedForThis ? 'my-vote' : '' }}">
+                                <div class="option-row {{ $votedForThis ? 'my-vote' : '' }} {{ $isVip ? 'vip-row' : '' }}">
                                     <div class="option-row-top">
                                         <div class="option-row-left">
                                             @if(!$userVoted && !$topic->is_closed)
                                                 <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;">
                                                     @csrf
                                                     <input type="hidden" name="option_id" value="{{ $option->id }}">
-                                                    <button type="submit" class="vote-radio-btn" title="Vote for {{ $option->label }}">
-                                                        <div class="vote-radio-dot static"></div>
-                                                    </button>
+                                                    <button type="submit" class="vote-radio-btn" style="{{ $isVip ? 'border-color:#f59e0b;' : '' }}" title="Vote for {{ $option->label }}"><div class="vote-radio-dot static"></div></button>
                                                 </form>
                                             @else
                                                 <div class="vote-radio-btn" style="cursor:default; {{ $votedForThis ? 'border-color:#6366f1;background:rgba(99,102,241,0.1);' : '' }}">
                                                     <div class="vote-radio-dot {{ $votedForThis ? 'selected' : 'static' }}"></div>
                                                 </div>
                                             @endif
-                                            <span class="option-label {{ $votedForThis ? 'voted' : '' }}">{{ $option->label }}</span>
+                                            <span class="option-label {{ $votedForThis ? 'voted' : '' }}">
+                                                {{ $option->label }}
+                                                @if($isVip)<span class="vip-option-tag">👑 VIP</span>@endif
+                                            </span>
                                         </div>
                                         <span class="option-stat">{{ $percentage }}% &nbsp;·&nbsp; {{ $option->votes_count }}</span>
                                     </div>
                                     <div class="option-bar">
-                                        <div class="option-bar-fill {{ $votedForThis ? '' : 'neutral' }}" data-width="{{ $percentage }}%" style="width:{{ $percentage }}%;"></div>
+                                        <div class="option-bar-fill {{ $votedForThis ? ($isVip ? 'vip-bar' : '') : 'neutral' }} {{ $isVip && !$votedForThis ? 'vip-bar' : '' }}" style="width:{{ $percentage }}%;"></div>
                                     </div>
                                 </div>
                             @else
-                                <div class="option-row">
+                                <div class="option-row {{ $isVip ? 'vip-row' : '' }}">
                                     <div class="option-row-simple">
                                         @if(!$userVoted && !$topic->is_closed)
                                             <form action="{{ route('votes.store', $topic) }}" method="POST" style="display:inline;margin:0;">
                                                 @csrf
                                                 <input type="hidden" name="option_id" value="{{ $option->id }}">
-                                                <button type="submit" class="vote-radio-btn" title="Vote for {{ $option->label }}">
-                                                    <div class="vote-radio-dot static"></div>
-                                                </button>
+                                                <button type="submit" class="vote-radio-btn" style="{{ $isVip ? 'border-color:#f59e0b;' : '' }}" title="Vote for {{ $option->label }}"><div class="vote-radio-dot static"></div></button>
                                             </form>
                                         @else
-                                            <div class="vote-radio-btn" style="cursor:default;">
-                                                <div class="vote-radio-dot static"></div>
-                                            </div>
+                                            <div class="vote-radio-btn" style="cursor:default;"><div class="vote-radio-dot static"></div></div>
                                         @endif
-                                        <span class="option-label">{{ $option->label }}</span>
+                                        <span class="option-label">
+                                            {{ $option->label }}
+                                            @if($isVip)<span class="vip-option-tag">👑 VIP</span>@endif
+                                        </span>
                                     </div>
                                 </div>
                             @endif

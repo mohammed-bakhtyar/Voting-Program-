@@ -265,12 +265,21 @@
                             Admin
                         </a>
                     @endif
+                    @if(auth()->user()->isAdmin())
                     <a href="{{ route('dashboard') }}" class="vp-btn vp-btn-ghost">
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                         </svg>
                         Dashboard
                     </a>
+                    @else
+                    <a href="{{ route('topics.index') }}" class="vp-btn vp-btn-ghost">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                        My Polls
+                    </a>
+                    @endif
                     <form action="{{ route('logout') }}" method="POST" style="display:inline;margin:0;">
                         @csrf
                         <button type="submit" class="vp-btn vp-btn-danger">
@@ -328,8 +337,10 @@
         });
 
         // 2. Prevent Form POSTs from pushing extra history states (PRG fix)
+        // Skip forms marked data-ajax (handled by page-level JS)
         document.addEventListener('submit', async function(e) {
             const form = e.target;
+            if (form.dataset.ajax) return; // let page-level handler deal with it
             if (form.tagName === 'FORM' && form.method.toLowerCase() === 'post') {
                 e.preventDefault();
                 const btn = form.querySelector('button[type="submit"]');

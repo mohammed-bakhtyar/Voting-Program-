@@ -20,13 +20,16 @@ class VoteController extends Controller
             'option_id' => 'required|exists:options,id',
         ]);
 
-        $userId = $request->user()->id;
+        $userId   = $request->user()->id;
         $optionId = $request->option_id;
 
         // Check if user already voted for this specific option
         $existingVote = $topic->votes()->where('user_id', $userId)->where('option_id', $optionId)->first();
 
         if ($existingVote) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Already voted for this option.']);
+            }
             return back()->with('success', 'You already voted for this option.');
         }
 
@@ -45,13 +48,28 @@ class VoteController extends Controller
 
         // Create new vote
         Vote::create([
-            'user_id' => $userId,
-            'topic_id' => $topic->id,
-            'option_id' => $optionId
+            'user_id'   => $userId,
+            'topic_id'  => $topic->id,
+            'option_id' => $optionId,
         ]);
 
         $topic->options()->find($optionId)->increment('votes_count');
         $topic->increment('total_votes');
+
+        if ($request->ajax() || $request->wantsJson()) {
+            $topic->refresh();
+            $topic->load(['options' => fn($q) => $q->orderBy('display_order')]);
+            return response()->json([
+                'success'     => true,
+                'voted_option'=> (int) $optionId,
+                'total_votes' => $topic->total_votes,
+                'options'     => $topic->options->map(fn($o) => [
+                    'id'          => $o->id,
+                    'votes_count' => $o->votes_count,
+                    'percentage'  => $topic->total_votes > 0 ? round(($o->votes_count / $topic->total_votes) * 100) : 0,
+                ]),
+            ]);
+        }
 
         return back()->with('success', 'Vote cast successfully.');
     }
@@ -61,7 +79,7 @@ class VoteController extends Controller
         $this->authorize('vote', $topic);
 
         $votes = $topic->votes()->where('user_id', $request->user()->id)->get();
-        
+
         foreach ($votes as $vote) {
             $option = $topic->options()->find($vote->option_id);
             if ($option) {
@@ -69,6 +87,21 @@ class VoteController extends Controller
             }
             $vote->delete();
             $topic->decrement('total_votes');
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            $topic->refresh();
+            $topic->load(['options' => fn($q) => $q->orderBy('display_order')]);
+            return response()->json([
+                'success'     => true,
+                'voted_option'=> null,
+                'total_votes' => $topic->total_votes,
+                'options'     => $topic->options->map(fn($o) => [
+                    'id'          => $o->id,
+                    'votes_count' => $o->votes_count,
+                    'percentage'  => $topic->total_votes > 0 ? round(($o->votes_count / $topic->total_votes) * 100) : 0,
+                ]),
+            ]);
         }
 
         return back()->with('success', 'Vote withdrawn successfully.');
