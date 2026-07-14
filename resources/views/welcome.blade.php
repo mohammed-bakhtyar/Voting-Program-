@@ -64,23 +64,23 @@
 
         .float-svg {
             position: absolute;
-            width: 100px;
-            height: 100px;
+            width: 140px;
+            height: 140px;
             pointer-events: auto;
             transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4));
         }
-        .float-svg:hover { transform: scale(1.15) rotate(5deg) !important; filter: drop-shadow(0 15px 30px rgba(99,102,241,0.5)); }
+        .float-svg:hover { transform: scale(1.15) rotate(5deg) !important; filter: drop-shadow(0 15px 40px rgba(99,102,241,0.6)); }
 
         .float-svg-1 {
-            top: 20%; left: 15%;
+            top: 15%; left: 12%;
             animation: floatSvg1 8s ease-in-out infinite;
-            color: #10b981;
+            color: #6366f1; /* Indigo base */
         }
         .float-svg-2 {
-            bottom: 25%; right: 15%;
+            bottom: 20%; right: 12%;
             animation: floatSvg2 10s ease-in-out infinite reverse;
-            color: #f59e0b;
+            color: #8b5cf6; /* Violet base */
         }
 
         @keyframes floatSvg1 {
@@ -207,23 +207,36 @@
         <div class="layer" data-speed="0.8">
             <div class="planet planet-3"></div>
             
-            <!-- Minimalist Island SVG -->
-            <svg class="float-svg float-svg-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 17c-4 3-10 3-16 2-2-.3-4-1-4-2s3-2 7-2 9 1 13 2z" fill="rgba(16,185,129,0.05)"/>
-                <path d="M14 15V6"/>
-                <path d="M14 6c-2.5 0-4.5-1.5-5-3.5"/>
-                <path d="M14 6c3 0 5-1.5 5.5-3.5"/>
-                <path d="M14 6c-1-2.5 0-4.5 1-6"/>
-                <path d="M14 6c.5-2 2-3 4-3"/>
+            <!-- Hand-drawn Voting Ballot SVG -->
+            <svg class="float-svg float-svg-1" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Sketched Paper -->
+                <path d="M25 15 C40 12, 60 18, 75 15 C78 40, 72 60, 75 85 C60 88, 40 82, 25 85 C22 60, 28 40, 25 15 Z" fill="rgba(99,102,241,0.05)" />
+                <!-- Sketched Checkbox 1 -->
+                <path d="M35 35 C40 33, 42 38, 40 42 C35 44, 33 39, 35 35" />
+                <!-- Sketched Line 1 -->
+                <path d="M50 38 C60 37, 65 39, 70 38" opacity="0.4" />
+                
+                <!-- Sketched Checkbox 2 with Glowing Checkmark -->
+                <path d="M35 55 C40 53, 42 58, 40 62 C35 64, 33 59, 35 55" />
+                <path d="M32 55 C36 60, 38 65, 45 50" stroke="#10b981" stroke-width="4" style="filter: drop-shadow(0 0 8px rgba(16,185,129,0.8));" />
+                <!-- Sketched Line 2 -->
+                <path d="M50 58 C60 57, 65 59, 70 58" opacity="0.4" />
             </svg>
 
-            <!-- Minimalist Tickets SVG -->
-            <svg class="float-svg float-svg-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="6" width="20" height="12" rx="2" fill="rgba(245,158,11,0.05)"/>
-                <path d="M2 10a2 2 0 0 1 0 4"/>
-                <path d="M22 10a2 2 0 0 0 0 4"/>
-                <path d="M10 6v12" stroke-dasharray="2 2"/>
-                <path d="M14 6v12" stroke-dasharray="2 2"/>
+            <!-- Hand-drawn Analytics Pulse SVG -->
+            <svg class="float-svg float-svg-2" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Sketched Axes -->
+                <path d="M15 15 C14 40, 16 60, 15 85 C40 86, 60 84, 85 85" opacity="0.4" />
+                
+                <!-- Sketched Rising Graph Line -->
+                <path d="M15 85 C30 70, 40 80, 50 50 C60 40, 70 55, 85 20" stroke="#f59e0b" stroke-width="4" style="filter: drop-shadow(0 0 8px rgba(245,158,11,0.8));" />
+                
+                <!-- Sketched Graph Dots -->
+                <circle cx="50" cy="50" r="4" fill="#f59e0b" stroke="none" style="filter: drop-shadow(0 0 5px #f59e0b);" />
+                <circle cx="85" cy="20" r="5" fill="#f59e0b" stroke="none" style="filter: drop-shadow(0 0 8px #f59e0b);" />
+                
+                <!-- Hand-drawn Sparkle/Pulse -->
+                <path d="M85 8 C88 3, 90 10, 95 12 C90 14, 88 20, 85 16 C82 20, 80 14, 75 12 C80 10, 82 3, 85 8 Z" fill="#f59e0b" stroke="none" opacity="0.8" />
             </svg>
         </div>
 
