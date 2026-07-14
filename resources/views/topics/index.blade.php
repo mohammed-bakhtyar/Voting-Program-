@@ -201,7 +201,7 @@
                     $isVip = $loop->first && isset($sort) && $sort === 'popular' && $topic->total_votes > 0;
                 @endphp
                 @if(!$isDraft)
-                    <a href="{{ route('topics.show', $topic) }}" class="poll-card stagger-item {{ $isVip ? 'vip-card' : '' }}" style="text-decoration:none; animation-delay: {{ $loop->iteration * 0.1 }}s;">
+                    <div class="poll-card stagger-item {{ $isVip ? 'vip-card' : '' }}" style="animation-delay: {{ $loop->iteration * 0.1 }}s;">
                         {{-- Card Header --}}
                     <div class="poll-card-header">
                         <h2 style="flex:1;">
@@ -319,7 +319,7 @@
                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
-                    </a>
+                    </div>
                 @endif
             @endforeach
         </div>
