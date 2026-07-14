@@ -62,34 +62,33 @@
         .planet-2 { width: 80px; height: 80px; background: linear-gradient(135deg, #f43f5e, #a855f7); bottom: 20%; left: 15%; filter: blur(2px); opacity: 0.7; }
         .planet-3 { width: 250px; height: 250px; background: radial-gradient(circle at 30% 30%, #312e81, #0f172a); bottom: -10%; right: -5%; border: 1px solid rgba(255,255,255,0.05); }
 
-        .float-img {
+        .float-svg {
             position: absolute;
-            width: 160px;
-            height: 160px;
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 30px rgba(99,102,241,0.2);
+            width: 100px;
+            height: 100px;
             pointer-events: auto;
             transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.1);
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
         }
-        .float-img:hover { transform: scale(1.15) rotate(5deg) !important; border-color: rgba(99, 102, 241, 0.6); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 50px rgba(99,102,241,0.4); z-index: 50; }
+        .float-svg:hover { transform: scale(1.15) rotate(5deg) !important; filter: drop-shadow(0 15px 30px rgba(99,102,241,0.5)); }
 
-        .float-img-1 {
+        .float-svg-1 {
             top: 20%; left: 15%;
-            animation: floatImg1 8s ease-in-out infinite;
+            animation: floatSvg1 8s ease-in-out infinite;
+            color: #10b981;
         }
-        .float-img-2 {
+        .float-svg-2 {
             bottom: 25%; right: 15%;
-            animation: floatImg2 10s ease-in-out infinite reverse;
+            animation: floatSvg2 10s ease-in-out infinite reverse;
+            color: #f59e0b;
         }
 
-        @keyframes floatImg1 {
+        @keyframes floatSvg1 {
             0% { transform: translateY(0px) rotate(-8deg); }
             50% { transform: translateY(-25px) rotate(0deg); }
             100% { transform: translateY(0px) rotate(-8deg); }
         }
-        @keyframes floatImg2 {
+        @keyframes floatSvg2 {
             0% { transform: translateY(0px) rotate(8deg); }
             50% { transform: translateY(-30px) rotate(15deg); }
             100% { transform: translateY(0px) rotate(8deg); }
@@ -208,8 +207,24 @@
         <div class="layer" data-speed="0.8">
             <div class="planet planet-3"></div>
             
-            <img src="{{ asset('img/island.png') }}" class="float-img float-img-1" alt="Island">
-            <img src="{{ asset('img/tickets.png') }}" class="float-img float-img-2" alt="Tickets">
+            <!-- Minimalist Island SVG -->
+            <svg class="float-svg float-svg-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 17c-4 3-10 3-16 2-2-.3-4-1-4-2s3-2 7-2 9 1 13 2z" fill="rgba(16,185,129,0.05)"/>
+                <path d="M14 15V6"/>
+                <path d="M14 6c-2.5 0-4.5-1.5-5-3.5"/>
+                <path d="M14 6c3 0 5-1.5 5.5-3.5"/>
+                <path d="M14 6c-1-2.5 0-4.5 1-6"/>
+                <path d="M14 6c.5-2 2-3 4-3"/>
+            </svg>
+
+            <!-- Minimalist Tickets SVG -->
+            <svg class="float-svg float-svg-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="2" fill="rgba(245,158,11,0.05)"/>
+                <path d="M2 10a2 2 0 0 1 0 4"/>
+                <path d="M22 10a2 2 0 0 0 0 4"/>
+                <path d="M10 6v12" stroke-dasharray="2 2"/>
+                <path d="M14 6v12" stroke-dasharray="2 2"/>
+            </svg>
         </div>
 
         <!-- Content -->
