@@ -11,7 +11,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root {
-            --bg: #0c0c14;
+            --bg: #141525;
             --bg-card: rgba(255,255,255,0.04);
             --bg-card-hover: rgba(255,255,255,0.07);
             --border: rgba(255,255,255,0.08);
@@ -80,7 +80,7 @@
 
         /* ---- Scrollbar ---- */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0c0c14; }
+        ::-webkit-scrollbar-track { background: #141525; }
         ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.4); border-radius: 3px; }
 
         /* ---- Navbar ---- */
@@ -88,7 +88,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(12,12,20,0.8);
+            background: rgba(20,21,37,0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
